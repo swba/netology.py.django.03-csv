@@ -1,4 +1,5 @@
 from django.core.handlers.wsgi import WSGIRequest
+from django.http import Http404
 from django.shortcuts import render, redirect
 
 from phones.models import Phone
@@ -31,8 +32,6 @@ def show_product(request, slug):
         context = {
             'phone': Phone.objects.get(slug=slug)
         }
+        return render(request, template, context)
     except Phone.DoesNotExist:
-        template = 'not_found.html'
-        context = {}
-
-    return render(request, template, context)
+        raise Http404('Phone does not exist')
